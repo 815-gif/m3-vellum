@@ -1,0 +1,1157 @@
+/* ==========================================
+   1. VARIABLES Y CORE
+   ========================================== */
+:root {
+    --system-blue: #00d4ff;
+    --system-gold: #ffd700;
+    --bg: #050505;
+    --card: rgba(20, 20, 25, 0.95);
+    --text: #ffffff;
+    --border: #333333;
+}
+
+* { 
+    margin: 0; 
+    padding: 0; 
+    box-sizing: border-box; 
+}
+
+body { 
+    background: var(--bg); 
+    color: var(--text); 
+    font-family: 'Rajdhani', sans-serif; 
+    overflow-x: hidden;
+    min-height: 100vh;
+}
+
+/* ==========================================
+   2. ESTRUCTURA DE PANES
+   ========================================== */
+.pane {
+    display: block;
+    padding: 20px;
+    padding-bottom: 100px;
+    min-height: 100vh;
+}
+
+.hidden { display: none !important; }
+
+/* Navegación Inferior */
+.bottom-nav {
+    position: fixed;
+    bottom: 0; width: 100%;
+    background: #111;
+    display: flex;
+    justify-content: space-around;
+    padding: 15px;
+    border-top: 2px solid var(--system-blue);
+    z-index: 2000;
+}
+
+.nav-item { 
+    background: none; border: none; font-size: 24px; cursor: pointer; transition: 0.3s;
+}
+
+.nav-item.active { 
+    filter: drop-shadow(0 0 8px var(--system-blue)); 
+    transform: translateY(-5px); 
+}
+
+/* ==========================================
+   3. PERFIL Y AVATAR (CORREGIDO)
+   ========================================== */
+.profile-card-modern {
+    text-align: center;
+    padding-top: 40px;
+}
+
+.avatar-wrapper {
+    position: relative;
+    width: 130px;
+    height: 130px;
+    margin: 0 auto 15px;
+}
+
+#user-avatar {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 3px solid var(--system-blue);
+    object-fit: cover;
+    background: #fff;
+    position: relative;
+    z-index: 2;
+}
+
+.avatar-aura {
+    position: absolute;
+    top: -5px; left: -5px; right: -5px; bottom: -5px;
+    border-radius: 50%;
+    z-index: 1;
+    transition: 0.5s;
+}
+
+.pulse-animation {
+    animation: aura-pulse 2s infinite ease-in-out;
+}
+
+@keyframes aura-pulse {
+    0% { box-shadow: 0 0 10px var(--system-gold); }
+    50% { box-shadow: 0 0 25px var(--system-gold); }
+    100% { box-shadow: 0 0 10px var(--system-gold); }
+}
+
+.level-tag-modern {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background: var(--system-blue);
+    color: black;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-weight: bold;
+    font-size: 14px;
+    z-index: 3;
+}
+
+/* ==========================================
+   4. BARRAS DE ESTADO (XP Y ENERGÍA)
+   ========================================== */
+.content-box {
+    background: var(--card);
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    border: 1px solid var(--border);
+}
+
+.xp-bar-container {
+    width: 100%;
+    height: 12px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 6px;
+    overflow: hidden;
+    margin-top: 10px;
+}
+
+.xp-bar-fill {
+    height: 100%;
+    background: var(--system-blue);
+    width: 0%;
+    transition: width 0.5s ease;
+}
+
+/* ==========================================
+   5. PANEL DE INTERFAZ (CONFIG)
+   ========================================== */
+.config-btn {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: rgba(0, 212, 255, 0.2);
+    border: 1px solid var(--system-blue);
+    color: white;
+    padding: 10px;
+    border-radius: 50%;
+    z-index: 2500;
+}
+
+.interface-panel {
+    display: none;
+    position: fixed;
+    top: 70px;
+    right: 20px;
+    width: 260px;
+    background: rgba(10, 10, 15, 0.98);
+    border: 1px solid var(--system-blue);
+    padding: 20px;
+    border-radius: 12px;
+    z-index: 2600;
+    backdrop-filter: blur(10px);
+}
+
+.seccion-config button {
+    width: 100%;
+    padding: 8px;
+    margin: 5px 0;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid var(--border);
+    color: white;
+    cursor: pointer;
+}
+
+/* ==========================================
+   6. FORMULARIO Y MODALES
+   ========================================== */
+.overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.9); z-index: 3000;
+    display: flex; justify-content: center; align-items: center;
+}
+
+.system-modal {
+    background: var(--card);
+    width: 90%;
+    max-width: 400px;
+    padding: 20px;
+    border-radius: 15px;
+    border: 1px solid var(--system-blue);
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.system-input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 10px;
+    background: #222;
+    border: 1px solid var(--border);
+    color: white;
+    border-radius: 5px;
+}
+
+.btn-save-modern {
+    width: 100%;
+    padding: 15px;
+    background: var(--system-blue);
+    color: black;
+    border: none;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* Botón flotante + */
+.float-btn {
+    position: fixed; bottom: 85px; right: 20px;
+    width: 55px; height: 55px;
+    background: var(--system-blue);
+    border-radius: 50%; border: none;
+    font-size: 24px; color: black;
+    z-index: 1000;
+    box-shadow: 0 0 15px var(--system-blue);
+}
+
+/* ==========================================
+   7. GRID DE BIBLIOTECA
+   ========================================== */
+.view-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 15px;
+}
+
+.manhwa-card-modern {
+    background: var(--card);
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+}
+
+.card-img-wrapper img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.card-info { padding: 10px; font-size: 14px; }
+
+/* Splash Screen */
+#splash-screen {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: #000; z-index: 5000;
+    display: flex; justify-content: center; align-items: center;
+    transition: 0.5s;
+}
+.splash-hidden { opacity: 0; visibility: hidden; }
+/* Partículas místicas */
+.bg-sakura::before {
+    content: "";
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background-image: 
+        radial-gradient(2px 2px at 20px 30px, #eee, rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 40px 70px, #fff, rgba(0,0,0,0)),
+        radial-gradient(1.5px 1.5px at 50px 160px, var(--system-blue), rgba(0,0,0,0));
+    background-repeat: repeat;
+    background-size: 200px 200px;
+    animation: mystical-float 20s linear infinite;
+    opacity: 0.3;
+    pointer-events: none;
+    z-index: -1;
+}
+
+@keyframes mystical-float {
+    from { transform: translateY(0); }
+    to { transform: translateY(-200px); }
+}
+
+/* Fondos extra */
+.bg-vacio { background: #000 !important; }
+.bg-stars { background: radial-gradient(circle at center, #1b2735 0%, #090a0f 100%) !important; }
+.bg-neon { background: linear-gradient(135deg, #0f0c29, #302b63, #24243e) !important; }
+/* Efecto de Reinicio de Sistema (Flash) */
+.system-reboot-flash {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: white;
+    z-index: 9999;
+    pointer-events: none;
+    opacity: 0;
+}
+
+.flash-active {
+    animation: flash-animation 0.5s ease-out;
+}
+
+@keyframes flash-animation {
+    0% { opacity: 0; }
+    20% { opacity: 1; }
+    100% { opacity: 0; }
+}
+.system-notification-overlay {
+    position: fixed;
+    top:0; left:0; width:100%; height:100%;
+    background: rgba(0,0,0,0.9);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 10000; animation: fadeIn 0.3s;
+}
+.notification-card {
+    background: #0a0a0a;
+    border: 2px solid var(--system-blue);
+    padding: 30px; text-align: center;
+    box-shadow: 0 0 50px var(--system-blue);
+    border-radius: 10px; max-width: 400px;
+}
+.notification-header { color: var(--system-blue); font-weight: bold; margin-bottom: 15px; }
+.notification-card h2 { font-size: 2.5rem; color: #fff; text-shadow: 0 0 10px var(--system-blue); }
+.notification-card button { 
+    margin-top: 20px; background: var(--system-blue); color: white; border: none; padding: 10px 20px; cursor: pointer;
+}
+/* --- BOTONES DE CARGA DE MEMORIA (PERFIL) --- */
+.seccion-config {
+    margin: 15px 0;
+    padding: 10px;
+    border-left: 3px solid var(--system-blue, #00d4ff);
+    background: rgba(0, 212, 255, 0.05);
+}
+
+.seccion-config button, .btn-import-label {
+    display: block; width: 100%;
+    margin: 8px 0; padding: 10px;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.8rem; letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer; transition: 0.3s;
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    background: rgba(0, 0, 0, 0.5);
+    color: #00d4ff; text-align: center;
+}
+
+.seccion-config button:hover, .btn-import-label:hover {
+    background: #00d4ff; color: #000;
+    box-shadow: 0 0 15px rgba(0, 212, 255, 0.6);
+}
+
+/* --- FORMULARIO Y FILAS DE INPUTS --- */
+.input-row {
+    display: flex; gap: 10px; margin-bottom: 10px;
+}
+
+.input-group {
+    flex: 1; display: flex; flex-direction: column;
+}
+
+.input-group small {
+    color: #00d4ff; font-size: 0.6rem;
+    margin-bottom: 4px; font-family: 'Orbitron';
+}
+
+.system-input {
+    background: rgba(255, 255, 255, 0.05) !important;
+    border: 1px solid rgba(0, 212, 255, 0.2) !important;
+    color: #fff !important; padding: 10px;
+    border-radius: 4px; font-family: 'Rajdhani', sans-serif;
+}
+
+.system-input:focus {
+    border-color: #00d4ff !important;
+    outline: none; box-shadow: inset 0 0 8px rgba(0, 212, 255, 0.2);
+}
+
+/* --- BADGES PARA EL HOME --- */
+.card-caps-badge {
+    position: absolute; bottom: 10px; left: 10px;
+    background: rgba(0, 0, 0, 0.85);
+    padding: 4px 10px; border-radius: 5px;
+    border-left: 3px solid #00d4ff;
+    font-family: 'Orbitron', sans-serif; font-size: 0.7rem;
+}
+.cap-current { color: #fff; }
+.cap-divider { color: #00d4ff; margin: 0 2px; }
+.cap-total { color: #888; }
+/* --- FICHA DE DETALLES SISTEMA --- */
+.detail-card-modern {
+    background: rgba(10, 10, 15, 0.95);
+    border: 2px solid #00d4ff;
+    box-shadow: 0 0 30px rgba(0, 212, 255, 0.2);
+    padding: 20px;
+    border-radius: 15px;
+    color: white;
+    max-width: 90%;
+    margin: auto;
+}
+
+.detail-header {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.detail-img {
+    width: 120px;
+    height: 170px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid #00d4ff;
+}
+
+.detail-type {
+    background: #00d4ff;
+    color: #000;
+    padding: 2px 8px;
+    font-size: 0.7rem;
+    font-weight: bold;
+    border-radius: 4px;
+}
+
+.detail-stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    background: rgba(255,255,255,0.05);
+    padding: 10px;
+    border-radius: 8px;
+}
+
+.d-stat small {
+    display: block;
+    color: #00d4ff;
+    font-size: 0.6rem;
+    font-family: 'Orbitron';
+}
+
+.detail-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.btn-edit { background: #4caf50; color: white; border: none; padding: 10px; flex: 1; cursor: pointer; }
+.btn-delete { background: #ff4d4d; color: white; border: none; padding: 10px; flex: 1; cursor: pointer; }
+.btn-close { background: #555; color: white; border: none; padding: 10px; flex: 1; cursor: pointer; }
+
+/* --- EFECTO GLITCH PARA RANGO --- */
+.rank-glitch {
+    animation: glitch-anim 0.3s cubic-bezier(.25,.46,.45,.94) both infinite;
+}
+
+@keyframes glitch-anim {
+    0% { transform: translate(0); }
+    20% { transform: translate(-2px, 2px); }
+    40% { transform: translate(-2px, -2px); }
+    60% { transform: translate(2px, 2px); }
+    80% { transform: translate(2px, -2px); }
+    100% { transform: translate(0); }
+}
+
+/* --- FIX SPLASH SCREEN --- */
+.splash-hidden {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    transition: 0.5s ease-out;
+}
+/* --- BUSCADOR --- */
+.search-container {
+    padding: 10px;
+    margin-bottom: 15px;
+}
+.search-input {
+    width: 100%;
+    background: rgba(0, 212, 255, 0.1);
+    border: 1px solid #00d4ff;
+    padding: 12px;
+    border-radius: 8px;
+    color: white;
+    font-family: 'Rajdhani', sans-serif;
+    outline: none;
+}
+
+/* --- LOGROS (ACHIEVEMENTS) --- */
+.achievement-popup {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: linear-gradient(135deg, #1a1a1a, #000);
+    border-left: 5px solid #ffd700;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
+    z-index: 10000;
+    animation: slideInRight 0.5s ease-out;
+    color: white;
+}
+@keyframes slideInRight {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+/* Contenedor de Logros en el Perfil */
+.achievement-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.achievement-slot {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(0, 212, 255, 0.2);
+    border-radius: 8px;
+    padding: 10px 5px;
+    text-align: center;
+    filter: grayscale(1); /* Apagado si no se tiene */
+    transition: 0.3s;
+    font-size: 0.6rem;
+}
+
+.achievement-slot.unlocked {
+    filter: grayscale(0);
+    border-color: #ffd700;
+    background: rgba(255, 215, 0, 0.1);
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
+}
+
+.achievement-icon { font-size: 1.5rem; display: block; }
+
+/* Gráfico de Estadísticas */
+.stats-chart-container {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 12px;
+    padding: 15px;
+    margin-top: 15px;
+}
+
+.chart-bar {
+    height: 8px;
+    background: #00d4ff;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    transition: width 1s ease-in-out;
+}
+/* Asegura que el panel sea visible cuando tenga la clase .active */
+.interface-panel {
+    display: none; /* Oculto por defecto */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(10, 10, 10, 0.95);
+    border: 2px solid #00d4ff;
+    padding: 20px;
+    z-index: 10000; /* Por encima de todo */
+    width: 80%;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.interface-panel.active {
+    display: block !important;
+}
+
+/* Título de Rango Dinámico */
+.title-badge-gold {
+    font-size: 0.7rem;
+    color: #ffd700;
+    text-shadow: 0 0 5px gold;
+    letter-spacing: 2px;
+}
+/* Botón de cierre para la interfaz */
+.btn-regresar {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: rgba(255, 0, 0, 0.2);
+    border: 1px solid #ff4d4d;
+    color: #ff4d4d;
+    padding: 5px 15px;
+    cursor: pointer;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.7rem;
+    transition: 0.3s;
+}
+
+.btn-regresar:hover {
+    background: #ff4d4d;
+    color: white;
+    box-shadow: 0 0 10px #ff4d4d;
+}
+
+/* Panel de Misiones */
+.quest-panel {
+    background: rgba(0, 212, 255, 0.05);
+    border-left: 3px solid var(--neon-blue);
+    padding: 15px;
+    margin: 15px 0;
+    border-radius: 0 10px 10px 0;
+}
+
+.quest-title {
+    color: #00d4ff;
+    font-family: 'Orbitron';
+    font-size: 0.8rem;
+    margin-bottom: 5px;
+}
+/* EFECTO NEÓN Y MARCOS METÁLICOS */
+#inventory-container, #quest-container {
+    margin: 15px 0;
+    perspective: 1000px;
+}
+
+.system-card-gold {
+    background: linear-gradient(135deg, rgba(20, 20, 20, 0.95), rgba(40, 40, 40, 0.95));
+    border: 1px solid #ffd700;
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.2), inset 0 0 10px rgba(255, 215, 0, 0.1);
+    border-radius: 4px;
+    padding: 12px;
+    position: relative;
+    overflow: hidden;
+}
+
+.system-card-blue {
+    background: linear-gradient(135deg, rgba(10, 15, 25, 0.98), rgba(20, 30, 50, 0.95));
+    border: 1px solid #00d4ff;
+    box-shadow: 0 0 15px rgba(0, 212, 255, 0.3), inset 0 0 10px rgba(0, 212, 255, 0.1);
+    border-radius: 4px;
+    padding: 12px;
+}
+
+/* Animación de pulso para objetos raros */
+@keyframes item-pulse {
+    0% { filter: drop-shadow(0 0 2px #ffd700); }
+    50% { filter: drop-shadow(0 0 8px #ffd700); }
+    100% { filter: drop-shadow(0 0 2px #ffd700); }
+}
+
+.rare-item { animation: item-pulse 2s infinite; }
+
+/* Estilo del Mercado Negro */
+.black-market-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.shop-item {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid #444;
+    padding: 8px;
+    text-align: center;
+    transition: 0.3s;
+}
+
+.shop-item:hover {
+    border-color: #00d4ff;
+    background: rgba(0,212,255,0.05);
+}
+/* EFECTO SOMBRAS INVOCADAS */
+#shadows-army-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 250px;
+    height: 250px;
+    z-index: -1; /* Detrás del avatar */
+    pointer-events: none;
+}
+
+.shadow-wraith {
+    position: absolute;
+    width: 60px;
+    height: 85px;
+    border-radius: 4px;
+    border: 1px solid #00d4ff;
+    background-size: cover;
+    background-position: center;
+    filter: drop-shadow(0 0 8px #00d4ff) blue;
+    opacity: 0.5;
+    animation: shadow-float 4s infinite ease-in-out;
+    mask-image: linear-gradient(to top, transparent, black);
+}
+
+@keyframes shadow-float {
+    0%, 100% { transform: translateY(0) rotate(5deg); opacity: 0.4; }
+    50% { transform: translateY(-15px) rotate(-5deg); opacity: 0.7; }
+}
+
+/* Botón de Extracción (Favoritos) en los detalles */
+.btn-extract {
+    background: linear-gradient(45deg, #1a1a1a, #0055ff);
+    color: #00d4ff;
+    border: 1px solid #00d4ff;
+    padding: 8px;
+    cursor: pointer;
+    font-family: 'Orbitron';
+    font-size: 0.6rem;
+    transition: 0.3s;
+}
+
+.btn-extract.is-shadow {
+    background: #00d4ff;
+    color: #000;
+    box-shadow: 0 0 15px #00d4ff;
+}
+/* --- ANCLA ESPECTRAL Y EFECTOS DE FONDO --- */
+#spectral-anchor {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none; /* No interfiere con los clics */
+    z-index: -1;
+    overflow: hidden;
+}
+
+/* Animación de partículas espectrales (simuladas con sombras) */
+.spectral-particle {
+    position: absolute;
+    background: rgba(0, 255, 255, 0.4);
+    border-radius: 50%;
+    filter: blur(5px);
+    animation: floatParticle 8s infinite linear;
+}
+
+@keyframes floatParticle {
+    0% { transform: translateY(100vh) scale(0); opacity: 0; }
+    50% { opacity: 0.5; }
+    100% { transform: translateY(-10vh) scale(1.5); opacity: 0; }
+}
+
+/* --- DISPLAY DE ORO --- */
+.gold-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 215, 0, 0.1);
+    padding: 4px 12px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    margin-top: 5px;
+    width: fit-content;
+}
+
+#player-gold-display {
+    color: #ffd700;
+    font-family: 'Orbitron', sans-serif;
+    font-weight: bold;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+/* --- LIBRO DE HABILIDADES (GRID) --- */
+.skill-grid-modern {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.skill-slot {
+    position: relative;
+    background: rgba(20, 20, 25, 0.8);
+    border: 2px solid #333;
+    border-radius: 12px;
+    padding: 15px;
+    text-align: center;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.skill-inner {
+    font-size: 2rem;
+    margin-bottom: 5px;
+    filter: drop-shadow(0 0 5px rgba(255,255,255,0.2));
+}
+
+.skill-slot small {
+    display: block;
+    font-family: 'Rajdhani', sans-serif;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+/* --- ESTADOS: BLOQUEADO VS ACTIVO --- */
+.skill-slot.locked {
+    filter: grayscale(1) brightness(0.5);
+    border-style: dashed;
+    opacity: 0.7;
+}
+
+.skill-slot.locked::after {
+    content: "🔒";
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    font-size: 0.8rem;
+}
+
+/* Habilidad: Ojo del Señor (Neon Azul/Dorado) */
+#skill-ojo:not(.locked) {
+    border-color: #00f2ff;
+    box-shadow: 0 0 15px rgba(0, 242, 255, 0.4), inset 0 0 10px rgba(0, 242, 255, 0.2);
+    animation: neonPulseBlue 2s infinite alternate;
+}
+
+/* Habilidad: Sed de Sangre (Neon Rojo) */
+#skill-sed:not(.locked) {
+    border-color: #ff004c;
+    box-shadow: 0 0 15px rgba(255, 0, 76, 0.4), inset 0 0 10px rgba(255, 0, 76, 0.2);
+    animation: neonPulseRed 2s infinite alternate;
+}
+
+@keyframes neonPulseBlue {
+    from { box-shadow: 0 0 5px #00f2ff, inset 0 0 2px #00f2ff; }
+    to { box-shadow: 0 0 20px #00f2ff, inset 0 0 8px #00f2ff; }
+}
+
+@keyframes neonPulseRed {
+    from { box-shadow: 0 0 5px #ff004c, inset 0 0 2px #ff004c; }
+    to { box-shadow: 0 0 20px #ff004c, inset 0 0 8px #ff004c; }
+}
+
+/* Efecto al pasar el mouse por una habilidad comprada */
+.skill-slot:not(.locked):hover {
+    transform: translateY(-5px) scale(1.05);
+}
+/* --- EFECTOS DEL ANCLA ESPECTRAL --- */
+.shadow-particle {
+    position: absolute;
+    width: 2px;
+    height: 10px;
+    background: linear-gradient(to top, transparent, var(--neon-blue, #00d4ff));
+    filter: blur(1px);
+    opacity: 0;
+    pointer-events: none;
+    animation: soulRise 5s infinite ease-in;
+}
+
+@keyframes soulRise {
+    0% { transform: translateY(100vh) scaleY(1); opacity: 0; }
+    20% { opacity: 0.6; }
+    80% { opacity: 0.3; }
+    100% { transform: translateY(-10vh) scaleY(2); opacity: 0; }
+}
+
+/* Estado Sed de Sangre Activo */
+.blood-mode #spectral-anchor {
+    background: radial-gradient(circle at center, rgba(255, 0, 0, 0.2) 0%, transparent 70%) !important;
+    transition: background 1s ease;
+}
+
+.blood-mode .shadow-particle {
+    background: linear-gradient(to top, transparent, #ff004c) !important;
+    box-shadow: 0 0 8px #ff004c;
+}
+
+.blood-aura-pulse {
+    position: fixed;
+    inset: 0;
+    border: 5px solid #ff004c;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 999;
+    animation: bloodPulse 2s infinite;
+}
+
+@keyframes bloodPulse {
+    0% { opacity: 0; box-shadow: inset 0 0 20px #ff004c; }
+    50% { opacity: 0.2; box-shadow: inset 0 0 50px #ff004c; }
+    100% { opacity: 0; box-shadow: inset 0 0 20px #ff004c; }
+}
+/* --- SOMBRAS PATRULLANDO --- */
+.patrolling-shadow {
+    position: fixed;
+    bottom: -10px;
+    width: 60px;
+    height: 90px;
+    background-size: cover;
+    background-position: center;
+    border-radius: 5px;
+    filter: grayscale(1) brightness(0.6) drop-shadow(0 0 10px var(--aura-custom-color, #00d4ff));
+    opacity: 0.4;
+    pointer-events: none;
+    z-index: -1;
+    mask-image: linear-gradient(to top, black 70%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to top, black 70%, transparent 100%);
+    animation: patrolWalk linear forwards;
+}
+
+@keyframes patrolWalk {
+    from { transform: translateX(-100px) translateY(0); }
+    to { transform: translateX(110vw) translateY(-20px); }
+}
+.shadow-shop-container {
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 15px;
+    margin-top: 20px;
+    backdrop-filter: blur(5px);
+}
+
+.shop-title {
+    color: var(--aura-custom-color, #00d4ff);
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.7rem;
+    margin-bottom: 10px;
+    text-align: center;
+    letter-spacing: 2px;
+}
+
+.shop-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.shop-btn {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid #444;
+    color: white;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.shop-btn:hover {
+    background: rgba(255,255,255,0.1);
+    border-color: var(--aura-custom-color, #00d4ff);
+}
+
+.color-slots {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 5px;
+}
+
+.color-dot {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid rgba(255,255,255,0.2);
+    transition: transform 0.2s;
+}
+
+.color-dot:hover {
+    transform: scale(1.2);
+}
+/* --- ESTILO FUTURISTA: TIENDA DE SOMBRAS --- */
+.shadow-shop-ui {
+    background: rgba(0, 0, 0, 0.6);
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    border-radius: 15px;
+    padding: 20px;
+    margin: 20px 0;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    font-family: 'Rajdhani', sans-serif;
+}
+
+.shadow-shop-ui h4 {
+    font-family: 'Orbitron', sans-serif;
+    color: var(--aura-custom-color, #00d4ff);
+    font-size: 0.9rem;
+    letter-spacing: 3px;
+    margin-bottom: 15px;
+    text-shadow: 0 0 10px var(--aura-custom-color, #00d4ff);
+    text-align: center;
+}
+
+.shop-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.shop-buttons button {
+    background: linear-gradient(45deg, rgba(0,0,0,0.8), rgba(20,20,20,0.8));
+    border: 1px solid #333;
+    color: #fff;
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.75rem;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+}
+
+.shop-buttons button:hover {
+    border-color: var(--aura-custom-color, #00d4ff);
+    box-shadow: 0 0 15px rgba(0, 212, 255, 0.4);
+    transform: translateY(-2px);
+}
+
+.shop-buttons button small {
+    color: #888;
+    display: block;
+    margin-top: 5px;
+    font-family: 'Rajdhani', sans-serif;
+}
+
+.color-picker {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    padding-top: 10px;
+}
+
+.color-picker button {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    border: 2px solid rgba(255,255,255,0.2);
+    padding: 0;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.color-picker button:hover {
+    transform: scale(1.2) rotate(90deg);
+    box-shadow: 0 0 15px currentColor;
+}
+/* ==========================================
+   EFECTOS DE AMBIENTE (PARTÍCULAS)
+   ========================================== */
+
+/* Contenedor principal de efectos (Ancla Espectral) */
+#spectral-anchor {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none; /* No bloquea clics en los botones */
+    z-index: -1; /* Se mantiene detrás de la interfaz */
+    overflow: hidden;
+}
+
+/* Partículas que flotan hacia arriba */
+.shadow-particle {
+    position: absolute;
+    bottom: -10px;
+    width: 2px;
+    height: 30px;
+    opacity: 0.6;
+    filter: blur(1px);
+    animation: floatUp linear forwards;
+}
+
+@keyframes floatUp {
+    0% {
+        transform: translateY(0) scaleY(1);
+        opacity: 0;
+    }
+    20% {
+        opacity: 0.6;
+    }
+    100% {
+        transform: translateY(-110vh) scaleY(2);
+        opacity: 0;
+    }
+}
+
+/* ==========================================
+   PATRULLA DE SOMBRAS (FANTASMAS)
+   ========================================== */
+
+.patrolling-shadow {
+    position: absolute;
+    width: 60px;
+    height: 80px;
+    background-size: cover;
+    background-position: center;
+    filter: grayscale(100%) brightness(0.5) drop-shadow(0 0 10px var(--aura-custom-color, #00d4ff));
+    opacity: 0.4;
+    mask-image: linear-gradient(to top, black 20%, transparent 90%);
+    -webkit-mask-image: linear-gradient(to top, black 20%, transparent 90%);
+    animation: patrolMove linear forwards;
+}
+
+@keyframes patrolMove {
+    0% {
+        left: -100px;
+        transform: skewX(10deg);
+    }
+    100% {
+        left: 110vw;
+        transform: skewX(-10deg);
+    }
+}
+
+/* ==========================================
+   MODO BERSERKER (SED DE SANGRE)
+   ========================================== */
+
+/* Pulso rojo en los bordes de la pantalla */
+.blood-aura-pulse {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    box-shadow: inset 0 0 100px rgba(255, 0, 0, 0.5);
+    pointer-events: none;
+    z-index: 9999;
+    animation: bloodPulse 2s infinite ease-in-out;
+}
+
+@keyframes bloodPulse {
+    0%, 100% { opacity: 0.2; }
+    50% { opacity: 0.7; }
+}
+
+/* Cuando Sed de Sangre está activa, cambiamos las partículas a rojo */
+body.blood-mode .shadow-particle {
+    background: linear-gradient(to top, transparent, #ff0000) !important;
+    box-shadow: 0 0 10px #ff0000 !important;
+    width: 4px; /* Más gruesas en modo berserker */
+}
+
+body.blood-mode .patrolling-shadow {
+    filter: grayscale(0%) sepia(100%) hue-rotate(-50deg) brightness(0.6) drop-shadow(0 0 15px red);
+}
+
+/* ==========================================
+   FLASH DEL SISTEMA
+   ========================================== */
+#system-flash {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: white;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 10000;
+    transition: opacity 0.1s ease;
+}
