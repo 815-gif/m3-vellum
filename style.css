@@ -1154,4 +1154,56 @@ body.blood-mode .patrolling-shadow {
     pointer-events: none;
     z-index: 10000;
     transition: opacity 0.1s ease;
+
+}
+/* BOTÓN SISTEMA NIVEL MONARCA */
+.google-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    width: 90%;
+    margin: 25px auto;
+    padding: 15px;
+    background: linear-gradient(135deg, rgba(10, 10, 10, 0.9), rgba(30, 30, 30, 0.9));
+    border: 2px solid #00d4ff; /* Azul Neón */
+    border-radius: 12px;
+    color: #00d4ff;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 14px;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: 0.4s;
+    text-transform: uppercase;
+    box-shadow: 0 0 15px rgba(0, 212, 255, 0.2), inset 0 0 10px rgba(0, 212, 255, 0.1);
+    position: relative;
+    z-index: 1;
+}
+
+.google-btn:hover {
+    background: #00d4ff;
+    color: #000;
+    box-shadow: 0 0 30px #00d4ff;
+    transform: scale(1.02);
+}
+
+.google-btn img {
+    width: 22px;
+    filter: drop-shadow(0 0 5px #00d4ff);
+}
+
+/* Efecto de pulso místico */
+.google-btn::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    border-radius: 10px;
+    border: 1px solid #00d4ff;
+    animation: auraPulse 2s infinite;
+    pointer-events: none;
+}
+
+@keyframes auraPulse {
+    0% { transform: scale(1); opacity: 0.8; }
+    100% { transform: scale(1.1); opacity: 0; }
 }
