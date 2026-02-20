@@ -1219,4 +1219,19 @@ body.blood-mode .patrolling-shadow {
     width: 100%;
     background: #1a1a1a; /* Fondo oscuro por si la imagen falla */
     min-height: 200px;
+
+}
+.manhwa-title {
+    font-size: 1.1rem;
+    color: #00d4ff;
+    margin: 10px 0;
+    
+    /* MAGIA PARA QUE NO SE SALGA EL TEXTO */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;    /* Máximo 2 líneas de texto */
+    -webkit-box-orient: vertical;
+    overflow: hidden;         /* Esconde lo que sobra */
+    text-overflow: ellipsis;  /* Pone los "..." si es muy largo */
+    
+    height: 2.6em;           /* Altura fija para que todas las tarjetas se vean iguales */
 }
