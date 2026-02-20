@@ -602,12 +602,20 @@ window.render = function() {
 
         card.innerHTML = `
             <div class="card-image-container">
-                <img src="${fotoUrl}" class="manhwa-img" alt="Portada" onerror="this.src='https://via.placeholder.com/150?text=Error+Carga'">
+                // Cambia la línea de la imagen por esta:
+<img src="${fotoUrl}" 
+     class="manhwa-img" 
+     alt="Portada" 
+     onclick="window.mostrarDetalles(${index})" 
+     style="cursor: pointer;"
+     onerror="this.src='https://via.placeholder.com/150?text=Error+Carga'">
                 ${m.isShadow ? '<div class="shadow-mark">SOMBRA</div>' : ''}
                 <div class="card-rating">⭐ ${m.rating || '0'}</div>
             </div>
             <div class="card-details">
-                <h3 class="manhwa-title">${m.title}</h3>
+                <h3 class="manhwa-title" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+    ${m.title}
+</h3>
                 <p class="manhwa-cap">Capítulo: ${m.current} / ${m.total || '?'}</p>
                 <div class="card-actions">
                     <button onclick="editarManhwa(${index})" class="btn-edit">📝</button>
@@ -706,9 +714,12 @@ window.eliminarManhwa = (index) => {
     }
 };
 
-window.prepararEdicion = (index) => {
+// Cambiamos el nombre para que coincida con el botón
+window.editarManhwa = function(index) {
     const m = window.myLibrary[index];
     editingIndex = index;
+    
+    // Llenamos el formulario
     document.getElementById('input-title').value = m.title;
     document.getElementById('input-author').value = m.author || "";
     document.getElementById('input-artist').value = m.artist || "";
@@ -718,8 +729,10 @@ window.prepararEdicion = (index) => {
     document.getElementById('input-rating').value = m.rating;
     document.getElementById('input-type').value = m.type || "";
     document.getElementById('input-status').value = m.status || "Publicándose";
+    
     selectedImage = m.img;
-    cerrarDetalles();
+    
+    // Abrimos el formulario
     document.getElementById('form-overlay').classList.remove('hidden');
 };
 
@@ -1095,4 +1108,5 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         };
     }
+
 });
