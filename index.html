@@ -286,24 +286,25 @@
         const db = getFirestore(app);
 
         // FUNCIÓN MEJORADA: SUBIR TODO A LA NUBE
-        window.subirALaNube = async function() {
-            const u = auth.currentUser;
-            if (!u) return alert("Inicia sesión para sincronizar.");
-            
-            try {
-                const docRef = doc(db, "usuarios", u.uid);
-                await setDoc(docRef, {
-                    manhwas: window.myLibrary, // ENVIAMOS LA LISTA COMPLETA
-                    titulos: JSON.parse(localStorage.getItem('titulosObtenidos')) || [],
-                    logros: JSON.parse(localStorage.getItem('logros_sistema')) || [],
-                    oro: parseInt(localStorage.getItem('system_gold')) || 0,
-                    lastUpdate: new Date()
-                }, { merge: true });
-                console.log("SISTEMA: Datos sincronizados con éxito.");
-            } catch (e) {
-                console.error("Error al subir:", e);
-            }
-        };
+       window.subirALaNube = async function() {
+    const u = auth.currentUser;
+    if (!u) return; 
+
+    try {
+        const docRef = doc(db, "usuarios", u.uid);
+        // USAMOS window.myLibrary PARA LLEVARNOS LOS 34
+        await setDoc(docRef, {
+            manhwas: window.myLibrary, 
+            lastUpdate: new Date(),
+            oro: parseInt(localStorage.getItem('system_gold')) || 0,
+            logros: JSON.parse(localStorage.getItem('logros_sistema')) || []
+        }, { merge: true });
+
+        console.log("SISTEMA: Nube actualizada con " + window.myLibrary.length + " manhwas.");
+    } catch (error) {
+        console.error("Error al sincronizar:", error);
+    }
+};
 
         window.vincularAlma = function() {
             const provider = new GoogleAuthProvider();
@@ -350,3 +351,4 @@
     <script src="script.js" defer></script>
 </body>
 </html>
+
