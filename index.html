@@ -268,76 +268,83 @@
     <button id="open-form-btn" class="float-btn" onclick="document.getElementById('form-overlay').classList.remove('hidden'); window.editingIndex = -1;">+</button>
 
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
-            apiKey: "AIzaSyBsMaxIU-wDJPIEyQyO-jsyZgR7ZKB-_h0",
-            authDomain: "manhwacloudv2.firebaseapp.com",
-            projectId: "manhwacloudv2",
-            storageBucket: "manhwacloudv2.firebasestorage.app",
-            messagingSenderId: "388201733980",
-            appId: "1:388201733980:web:9949d4f5fb0581a9526b99"
-        };
+  apiKey: "AIzaSyBsMaxIU-wDJPIEyQyO-jsyZgR7ZKB-_h0",
+  authDomain: "manhwacloudv2.firebaseapp.com",
+  projectId: "manhwacloudv2",
+  storageBucket: "manhwacloudv2.firebasestorage.app",
+  messagingSenderId: "388201733980",
+  appId: "1:388201733980:web:9949d4f5fb0581a9526b99"
+};
 
         const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
+        const auth = getAuth();
         const db = getFirestore(app);
-        const provider = new GoogleAuthProvider();
 
-        const btnGoogle = document.getElementById('btn-google');
-        if(btnGoogle) {
-            btnGoogle.onclick = async () => {
-                try { await signInWithPopup(auth, provider); } 
-                catch (e) { alert("Error de conexión: " + e.message); }
-            };
-        }
+        // FUNCIÓN MEJORADA: SUBIR TODO A LA NUBE
+        window.subirALaNube = async function() {
+            const u = auth.currentUser;
+            if (!u) return alert("Inicia sesión para sincronizar.");
+            
+            try {
+                const docRef = doc(db, "usuarios", u.uid);
+                await setDoc(docRef, {
+                    manhwas: window.myLibrary, // ENVIAMOS LA LISTA COMPLETA
+                    titulos: JSON.parse(localStorage.getItem('titulosObtenidos')) || [],
+                    logros: JSON.parse(localStorage.getItem('logros_sistema')) || [],
+                    oro: parseInt(localStorage.getItem('system_gold')) || 0,
+                    lastUpdate: new Date()
+                }, { merge: true });
+                console.log("SISTEMA: Datos sincronizados con éxito.");
+            } catch (e) {
+                console.error("Error al subir:", e);
+            }
+        };
 
-        window.subirALaNube = async (l) => {
-            if (auth.currentUser) await setDoc(doc(db, "usuarios", auth.currentUser.uid), { 
-                manhwas: l,
-                titulos: JSON.parse(localStorage.getItem('titulosObtenidos')) || [],
-                logros: JSON.parse(localStorage.getItem('logros_sistema')) || []
-            }, { merge: true });
+        window.vincularAlma = function() {
+            const provider = new GoogleAuthProvider();
+            signInWithPopup(auth, provider).catch(console.error);
         };
 
         onAuthStateChanged(auth, async (u) => {
             if (u) {
-                
-                console.log("SISTEMA: Sincronizando datos de la nube...");
-        try {
-            const docRef = doc(db, "usuarios", u.uid);
-            const docSnap = await getDoc(docRef);
+                // DESCARGAR DATOS AL ENTRAR
+                try {
+                    const docRef = doc(db, "usuarios", u.uid);
+                    const docSnap = await getDoc(docRef);
 
-            if (docSnap.exists()) {
-                const datosNube = docSnap.data().manhwas || [];
-                if (datosNube.length > 0) {
-                    window.myLibrary = datosNube;
-                    localStorage.setItem('myMangaCloud', JSON.stringify(window.myLibrary));
-                    if (typeof render === "function") render();
-                    if (typeof updateStats === "function") updateStats();
-                    console.log("SISTEMA: Datos recuperados con éxito.");
+                    if (docSnap.exists()) {
+                        const datosNube = docSnap.data().manhwas || [];
+                        if (datosNube.length > 0) {
+                            window.myLibrary = datosNube;
+                            localStorage.setItem('myMangaCloud', JSON.stringify(window.myLibrary));
+                            if (typeof render === "function") render();
+                            if (typeof updateStats === "function") updateStats();
+                            console.log("SISTEMA: Biblioteca recuperada (Total: " + datosNube.length + ")");
+                        }
+                    }
+                } catch (e) {
+                    console.error("Error al descargar:", e);
                 }
-            }
-        } catch (e) {
-            console.error("Error al descargar:", e);
-        }
+
                 const nameEl = document.getElementById('player-name');
                 const avatarEl = document.getElementById('user-avatar');
                 if(nameEl) nameEl.innerText = u.displayName.toUpperCase();
                 if(u.photoURL && avatarEl) avatarEl.src = u.photoURL;
                 
-                const s = await getDoc(doc(db, "usuarios", u.uid));
-                if (s.exists() && window.myLibrary) {
-                    // Carga de datos opcional aquí
+                if (document.getElementById('login-screen')) {
+                    document.getElementById('login-screen').classList.add('hidden');
                 }
             }
         });
 
         window.toggleInterfaz = function() {
             const panel = document.getElementById('panel-interfaz');
-            panel.classList.toggle('active');
+            if(panel) panel.classList.toggle('active');
         };
     </script>
     <script src="script.js" defer></script>
