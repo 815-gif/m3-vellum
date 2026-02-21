@@ -799,6 +799,9 @@ img: window.selectedImage || (editingIndex > -1 ? window.myLibrary[editingIndex]
     render();
     updateStats();
     
+    if (typeof window.subirALaNube === "function") {
+        window.subirALaNube(); 
+    }
     alert("✅ DATOS SINCRONIZADOS");
 };
 
@@ -1110,3 +1113,4 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 });
+
